@@ -14,10 +14,11 @@ def calcSize(name,chosenFont):
     fontsize = 1  # starting font size
 
     # portion of image width you want text width to be
-    img_fraction = 0.95
+    img_fraction_width = 0.95
+    img_fraction_height = 0.45
 
     font = ImageFont.truetype(chosenFont, fontsize)
-    while font.getsize(txt)[0] < img_fraction*image.size[0]:
+    while ((font.getsize(txt)[0] < img_fraction_width*image.size[0]) & (font.getsize(txt)[1] < img_fraction_height*image.size[1])):
         # iterate until the text size is just larger than the criteria
         fontsize += 1
         font = ImageFont.truetype(chosenFont, fontsize)
@@ -56,9 +57,9 @@ if inkyphat.get_version() == 1:
 
 name = sys.argv[1]
 
-chosenFont = inkyphat.fonts.AmaticSCBold
+chosenFont = inkyphat.fonts.AmaticSCBold # or something like '/usr/share/fonts/truetype/piboto/Piboto-Thin.ttf' # 
 
-font = ImageFont.truetype(inkyphat.fonts.AmaticSCBold, calcSize(name,chosenFont))
+font = ImageFont.truetype(chosenFont, calcSize(name,chosenFont))
 
 w, h = font.getsize(name)
 
