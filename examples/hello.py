@@ -2,10 +2,31 @@
 
 import sys
 
-from PIL import ImageFont
+from PIL import ImageFont, ImageDraw, Image
 
 import inkyphat
 
+
+def calcSize(name,chosenFont):
+    image = Image.open('resources/hello-badge.png')
+    draw = ImageDraw.Draw(image)
+    txt = name
+    fontsize = 1  # starting font size
+
+    # portion of image width you want text width to be
+    img_fraction = 0.95
+
+    font = ImageFont.truetype(chosenFont, fontsize)
+    while font.getsize(txt)[0] < img_fraction*image.size[0]:
+        # iterate until the text size is just larger than the criteria
+        fontsize += 1
+        font = ImageFont.truetype(chosenFont, fontsize)
+
+    # optionally de-increment to be sure it is less than criteria
+    fontsize -= 1
+    
+    return fontsize
+    
 
 print("""Inky pHAT: Hello... my name is:
 
@@ -33,9 +54,11 @@ if inkyphat.get_version() == 1:
 
 # Add the text
 
-font = ImageFont.truetype(inkyphat.fonts.AmaticSCBold, 38)
-
 name = sys.argv[1]
+
+chosenFont = inkyphat.fonts.AmaticSCBold
+
+font = ImageFont.truetype(inkyphat.fonts.AmaticSCBold, calcSize(name,chosenFont))
 
 w, h = font.getsize(name)
 
